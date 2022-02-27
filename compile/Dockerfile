@@ -36,7 +36,7 @@ ENV PATH="$PATH:/usr/local/go/bin"
 
 RUN useradd -m -s /bin/bash -u 1000 mirai
 USER mirai
-WORKDIR /home/mirai/src
+WORKDIR /home/mirai
 
 ENV GOPATH="/home/mirai/go"
 RUN mkdir ~/go && \
@@ -44,4 +44,5 @@ RUN mkdir ~/go && \
     go get github.com/go-sql-driver/mysql && \
     go get github.com/mattn/go-shellwords
 
-CMD [ "bash" ]
+COPY build.sh ./
+CMD [ "bash", "build.sh" ]
