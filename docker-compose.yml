@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+    compile:
+        build: compile
+        volumes:
+            - ./src:/home/mirai/src
+
+    mariadb:
+        image: mariadb:10.8.2-focal
+        restart: always
+        env_file:
+            - ./mariadb/config.env
+        volumes:
+            - ./mariadb/database:/var/lib/mysql
+            - ./mariadb/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf:ro
+            - ./src/scripts/db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+        ports:
+            - "3306:3306"

@@ -45,4 +45,4 @@ RUN mkdir ~/go && \
     go get github.com/mattn/go-shellwords
 
 COPY build.sh ./
-CMD [ "bash", "build.sh" ]
+CMD [ "bash" ]

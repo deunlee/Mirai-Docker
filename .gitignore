@@ -1,3 +1,6 @@
-src/loader/loader
+mariadb/database
+
 src/mirai/debug
 src/mirai/release
+src/mirai/tools/enc
+src/loader/loader
