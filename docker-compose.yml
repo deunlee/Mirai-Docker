@@ -4,7 +4,10 @@ services:
     compile:
         build: compile
         volumes:
-            - ./src:/home/mirai/src
+            - ./src:/home/user/src
+        ports:
+            - "23:23"
+            - "101:101"
 
     mariadb:
         image: mariadb:10.8.2-focal
