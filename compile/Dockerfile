@@ -1,11 +1,8 @@
 FROM fedora:35
 
-RUN dnf install -y gcc glibc-static golang ElectricFence mysql mariadb-common bind bind-utils && \
-    dnf groupinstall -y "Development Tools" && \
-    dnf install -y gmp-devel telnet net-tools && \
+RUN dnf install -y gcc glibc-static golang ElectricFence mysql mariadb-common bind bind-utils telnet net-tools && \
     dnf clean all && \
     rm -rf /var/cache/yum
-    # git mariadb-server
 
 WORKDIR /etc/xcompile
 ADD asset/*.tar.bz2 ./

