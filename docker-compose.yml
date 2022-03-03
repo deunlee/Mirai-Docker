@@ -3,29 +3,98 @@ version: "3.7"
 services:
 
     compile:
-        build: compile
+        build: docker/compile
+        hostname: compile
         volumes:
+            - ./docker/asset:/asset:ro
             - ./src:/home/user/src
+            - ./temp/xcompile:/etc/xcompile
 
     mariadb:
         image: mariadb:10.8.2-focal
         restart: always
         env_file:
-            - ./mariadb/config.env
+            - ./docker/mariadb/config.env
         volumes:
-            - ./mariadb/database:/var/lib/mysql
-            - ./mariadb/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf:ro
+            - ./docker/mariadb/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf:ro
             - ./src/scripts/db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+            - ./temp/database:/var/lib/mysql
         ports:
             - "3306:3306"
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.2
 
     cnc:
-        build: compile
+        build: docker/compile
         depends_on:
             - mariadb
         volumes:
             - ./src:/home/user/src
         ports:
-            - "23:23"
+            - "1023:23"
             - "101:101"
         command: "bash -c 'sudo ./src/mirai/debug/cnc'"
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.3
+
+    scan:
+        build: docker/compile
+        depends_on:
+            - cnc
+        volumes:
+            - ./src:/home/user/src
+        ports:
+            - "48101:48101"
+        command: "bash -c 'echo Start scanListen; ./src/mirai/debug/scanListen'"
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.4
+
+    # loader:
+    #     build: compile
+    #     depends_on:
+    #         - cnc
+    #     volumes:
+    #         - ./src:/home/user/src
+    #     command: "bash -c 'cd ~/src/loader; ./loader'"
+    #     tty: true
+        # networks:
+            # mirai:
+                # ipv4_address: 172.20.0.5
+
+    victim:
+        build: docker/victim
+        hostname: victim
+        volumes:
+            - ./test:/root/test # for dumped file
+        # environment:
+        #    - PASS=1234 # root password
+        ports:
+            - "2023:23" # for test
+        init: true
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.11
+
+    # victim2:
+    #     build: docker/victim
+    #     hostname: victim2
+    #     volumes:
+    #         - ./test:/root/test # for dumped file
+    #     # environment:
+    #     #     - PASS=1234 # root password
+    #     ports:
+    #         - "3023:23" # for test
+    #     init: true
+    #     networks:
+    #         mirai:
+    #             ipv4_address: 172.20.0.12
+
+
+networks:
+    mirai:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/24
