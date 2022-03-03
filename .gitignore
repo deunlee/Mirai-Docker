@@ -1,6 +1,7 @@
-mariadb/database
-
 src/mirai/debug
 src/mirai/release
 src/mirai/tools/enc
 src/loader/loader
+
+temp/xcompile
+temp/database
