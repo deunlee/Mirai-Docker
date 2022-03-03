@@ -30,9 +30,9 @@ services:
         depends_on:
             - mariadb
         volumes:
-            - ./src:/home/user/src
+            - ./src:/home/user/src:ro
         ports:
-            - "1023:23"
+            - "23:23"
             - "101:101"
         command: "bash -c 'sudo ./src/mirai/debug/cnc'"
         networks:
@@ -44,7 +44,7 @@ services:
         depends_on:
             - cnc
         volumes:
-            - ./src:/home/user/src
+            - ./src:/home/user/src:ro
         ports:
             - "48101:48101"
         command: "bash -c 'echo Start scanListen; ./src/mirai/debug/scanListen'"
@@ -63,6 +63,18 @@ services:
         # networks:
             # mirai:
                 # ipv4_address: 172.20.0.5
+
+    bot:
+        build: docker/victim
+        hostname: bot
+        volumes:
+            - ./src:/home/user/src:ro
+            - ./test:/root/test # for dumped file
+        # command: "/home/user/src/mirai/debug/mirai.dbg"
+        command: "bash -c 'exit'"
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.10
 
     victim:
         build: docker/victim
@@ -83,8 +95,6 @@ services:
     #     hostname: victim2
     #     volumes:
     #         - ./test:/root/test # for dumped file
-    #     # environment:
-    #     #     - PASS=1234 # root password
     #     ports:
     #         - "3023:23" # for test
     #     init: true

@@ -83,7 +83,7 @@ struct resolv_entries *resolv_lookup(char *domain)
 }
 ```
 
-If you want to enable scanner in debug mode, comment out the following two lines in [./src/mirai/bot/main.c](./src/mirai/bot/main.c).
+If you want to enable scanner in debug mode, comment out the following two lines in [./src/mirai/bot/main.c](./src/mirai/bot/main.c)
 ```c
 // #ifndef DEBUG // <-- comment here!
 #ifdef MIRAI_TELNET
@@ -92,7 +92,7 @@ If you want to enable scanner in debug mode, comment out the following two lines
 // #endif // <-- comment here!
 ```
 
-Edit get_random_ip() function in [./src/mirai/bot/scanner.c](./src/mirai/bot/scanner.c).
+Edit get_random_ip() function in [./src/mirai/bot/scanner.c](./src/mirai/bot/scanner.c)
 ```c
 static ipv4_t get_random_ip(void)
 {

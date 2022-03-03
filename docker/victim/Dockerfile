@@ -5,5 +5,4 @@ RUN set -eux; \
 	# shadow
 
 COPY *.sh /usr/local/bin/
-
-ENTRYPOINT ["docker-entrypoint.sh"]
+CMD [ "docker-entrypoint.sh" ]

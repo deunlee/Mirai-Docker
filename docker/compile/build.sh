@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo
 echo ===== START BUILDING =====
 echo
 
@@ -43,3 +44,4 @@ rm -f loader
 
 echo
 echo ===== BUILD FINISHED =====
+echo

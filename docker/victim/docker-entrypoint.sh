@@ -21,7 +21,7 @@ while true
 do
     sleep 1
     # tail -f /dev/null & wait ${!}
-    ps -ef
+    # ps -ef
 done
 
 # tail -f /var/log
