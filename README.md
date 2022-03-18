@@ -174,7 +174,7 @@ $ docker compose run compile ./debug.sh
 
 ## 08. Run CNC, MariaDB, loader, scanListen and some telnet servers(victims)
 ```
-$ docker compose run compile ./build.sh
+$ docker compose up
 ```
 ```
 mirai-docker-compile-1 exited with code 0
