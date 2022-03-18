@@ -40,6 +40,7 @@ chmod +x ~/.docker/cli-plugins/docker-compose
 
 docker compose version
 ```
+A reboot or re-login may be required.
 
 ## 02. Clone this repository
 ```
