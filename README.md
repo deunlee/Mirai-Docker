@@ -18,7 +18,7 @@ It is now open to [Mirai-Source-Code](https://github.com/jgamblin/Mirai-Source-C
 - https://docs.docker.com/get-docker/
 - https://github.com/docker/compose
 
-For Ubuntu:
+For Ubuntu (tested on Ubuntu 20.04 64-bit):
 ```
 sudo apt update
 sudo apt install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
@@ -33,6 +33,7 @@ sudo usermod -aG docker $USER
 
 docker -v
 ```
+
 ```
 mkdir -p ~/.docker/cli-plugins/
 curl -SL "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-$(uname -m)" -o ~/.docker/cli-plugins/docker-compose
@@ -40,7 +41,9 @@ chmod +x ~/.docker/cli-plugins/docker-compose
 
 docker compose version
 ```
+
 A reboot or re-login may be required.
+
 
 ## 02. Clone this repository
 ```
@@ -169,9 +172,9 @@ $ docker compose run compile ./debug.sh
 ```
 
 
-## 08. Run CNC, loader, scanListen and mariadb
+## 08. Run CNC, MariaDB, loader, scanListen and some telnet servers(victims)
 ```
-$ docker compose up
+$ docker compose run compile ./build.sh
 ```
 ```
 mirai-docker-compile-1 exited with code 0
@@ -250,6 +253,7 @@ $ docker compose run compile sudo ./src/mirai/debug/cnc
 
 
 ## 10. Run victim (insecure telnet server)
+It's not necessary if you've done step 8.
 ```
 $ docker compose run victim
 ```
