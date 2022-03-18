@@ -15,10 +15,31 @@ It is now open to [Mirai-Source-Code](https://github.com/jgamblin/Mirai-Source-C
 
 
 ## 01. Install docker and docker compose
-https://docs.docker.com/get-docker/
+- https://docs.docker.com/get-docker/
+- https://github.com/docker/compose
 
-https://github.com/docker/compose
+For Ubuntu:
+```
+sudo apt update
+sudo apt install -y ca-certificates curl software-properties-common apt-transport-https gnupg lsb-release
 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+
+docker -v
+```
+```
+mkdir -p ~/.docker/cli-plugins/
+curl -SL "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-$(uname -m)" -o ~/.docker/cli-plugins/docker-compose
+chmod +x ~/.docker/cli-plugins/docker-compose
+
+docker compose version
+```
 
 ## 02. Clone this repository
 ```
