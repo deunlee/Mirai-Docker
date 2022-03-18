@@ -81,27 +81,34 @@ services:
         hostname: victim
         volumes:
             - ./test:/root/test # for dumped file
-        # environment:
-        #    - PASS=1234 # root password
-        ports:
-            - "2023:23" # for test
+        environment:
+           - PASS=1234 # root password
+        # ports:
+        #     - "2023:23" # for test
         init: true
         networks:
             mirai:
                 ipv4_address: 172.20.0.11
 
-    # victim2:
-    #     build: docker/victim
-    #     hostname: victim2
-    #     volumes:
-    #         - ./test:/root/test # for dumped file
-    #     ports:
-    #         - "3023:23" # for test
-    #     init: true
-    #     networks:
-    #         mirai:
-    #             ipv4_address: 172.20.0.12
+    victim2:
+        build: docker/victim
+        hostname: victim2
+        init: true
+        environment:
+           - PASS=password # root password
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.12
 
+    victim3:
+        build: docker/victim
+        hostname: victim3
+        init: true
+        environment:
+           - PASS=system # root password
+        networks:
+            mirai:
+                ipv4_address: 172.20.0.13
 
 networks:
     mirai:
